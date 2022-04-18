@@ -23,13 +23,13 @@ public class LPseParser {
     public void program() {
         eat("BEGIN");
         while (lex.tok().type != "END") {
-            System.out.println("Program: " + lex.tok().type);
+           // System.out.println("Program: " + lex.tok().type);
             statement();
         }
     }
 
     public void statement() {
-        System.out.println("Statement: " + lex.tok().type);
+        //System.out.println("Statement: " + lex.tok().type);
         switch (lex.tok().type) {
             //statement -> PRINTINT exp SEMIC
             case "PRINTINT":
@@ -40,6 +40,7 @@ public class LPseParser {
             case "PRINTCHAR":
                 lex.next();
                 exp();
+                //eat("SEMIC");
                 break;
             //statement -> IF LBR exp RBR THEN
             case "IF":
@@ -51,14 +52,14 @@ public class LPseParser {
             //statement -> THEN statement* ELSE
             case "THEN":
                 lex.next();
-                while (lex.tok().type != "ELSE") {
+                while (!lex.tok().type.equals("ELSE")) {
                     statement();
                 }
                 break;
             //statement -> ELSE statement* ENDIF
             case "ELSE":
                 lex.next();
-                while (lex.tok().type != "ENDIF") {
+                while (!lex.tok().type.equals("ENDIF")) {
                     statement();
                 }
                 lex.next();
@@ -68,6 +69,7 @@ public class LPseParser {
                 lex.next();
                 eat("LBR");
                 exp();
+                statement();
                 break;
             // statement -> DO statement* DONE
             case "DO":
@@ -81,105 +83,102 @@ public class LPseParser {
             case "ID":
                 exp();
                 break;
-            case "EQ":
-                eat("EQ");
-                BasicExp();
-                break;
-            case "SEMIC":
-                eat("SEMIC");
-                break;
-            case "LEQ":
-                eat("LEQ");
-                BasicExp();
-                break;
-            case "DONE":
-                eat("DONE");
-                break;
             default:
                 throw new ParseException(lex.tok(), "PRINTINT", "PRINTCHAR", "IF", "THEN", "ELSE", "WHILE", "DO", "ID");
         }
     }
-
+    //exp ->  BasicExp ExpRest
     public void exp() {
-        System.out.println("Exp: " + lex.tok().type);
+        //System.out.println("Exp: " + lex.tok().type);
         BasicExp();
         ExpRest();
     }
 
     public void BasicExp() {
-        System.out.println("BasicExp: " + lex.tok().type);
+        //System.out.println("BasicExp: " + lex.tok().type);
         switch (lex.tok().type) {
+            //BasicExp -> INT
             case "INT":
                 eat("INT");
                 break;
+            //BasicExp -> ID
             case "ID":
                 eat("ID");
                 break;
+            //BasicExp -> LBR exp RBR
             case "LBR":
                 eat("LBR");
                 exp();
                 break;
+            //BasicExp -> EQ exp ExpRest
             case "EQ":
                 eat("EQ");
                 exp();
                 break;
             default:
-                throw new ParseException(lex.tok(), "INT", "ID", "LBR");
+                throw new ParseException(lex.tok(), "INT", "ID", "LBR","EQ");
         }
     }
 
     public void ExpRest() {
-        System.out.println("ExpRest: " + lex.tok().type);
+        //System.out.println("ExpRest: " + lex.tok().type);
         switch (lex.tok().type) {
+            //ExpRest  -> ADD Exp
             case "ADD":
                 eat("ADD");
-                BasicExp();
+                /*BasicExp();
+                ExpRest();*/
+                exp();
                 break;
+            //ExpRest  -> SUB Exp
             case "SUB":
                 eat("SUB");
-                BasicExp();
-                lex.next();
+                /*BasicExp();
+                ExpRest();*/
+                exp();
                 break;
+            //ExpRest  -> MUL Exp
             case "MUL":
                 eat("MUL");
                 BasicExp();
-                eat("SEMIC");
+                ExpRest();
                 break;
+            //ExpRest  -> DIV Exp
             case "DIV":
                 eat("DIV");
                 BasicExp();
+                ExpRest();
                 break;
+            //ExpRest  -> RBR
+            case "RBR":
+                eat("RBR");
+                break;
+
             case "EQUALS":
                 eat("EQUALS");
                 exp();
                 break;
-            case "LEQ":
-                eat("LEQ");
-                exp();
-                break;
-            case "LT":
-                eat("LT");
-                exp();
-                break;
-            case "RBR":
-                eat("RBR");
-                //lex.next();
-                ExpRest();
-                //statement();
-                break;
+            //ExpRest  -> EQ exp
             case "EQ":
                 eat("EQ");
                 exp();
                 break;
-            case "THEN":
-                eat("THEN");
+            //ExpRest  -> LEQ exp
+            case "LEQ":
+                eat("LEQ");
+                exp();
                 break;
-            case "DO":
-                eat("DO");
-                //statement();
+            //ExpRest -> LT exp
+            case "LT":
+                eat("LT");
+                exp();
+                break;
+            //ExpRest -> SEMIC
+            case "SEMIC":
+                eat("SEMIC");
                 break;
             default:
-                throw new ParseException(lex.tok(), "ADD", "SUB", "MUL", "DIV", "SEMIC");
+                throw new ParseException(lex.tok(), "ADD", "SUB", "MUL", "DIV","RBR","EQUALS","EQ","LEQ","LT", "SEMIC");
         }
     }
 
