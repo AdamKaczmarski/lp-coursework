@@ -1,0 +1,4 @@
+-- LL(1) Grammar for LPse
+begin
+    printint 2 + 3;
+end

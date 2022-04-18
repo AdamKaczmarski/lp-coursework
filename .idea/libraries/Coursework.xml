@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Coursework">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/LP2022.zip!/" />
+      <root url="jar://$PROJECT_DIR$/LL1CheckV2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
