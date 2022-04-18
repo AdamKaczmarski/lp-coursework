@@ -1,4 +1,4 @@
 begin 
-   printchar z ; 
-   printint z ; 
+   printchar z ;
+   printint z ;
 end 

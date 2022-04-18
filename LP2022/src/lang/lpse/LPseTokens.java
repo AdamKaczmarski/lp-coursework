@@ -20,16 +20,18 @@ public final class LPseTokens {
             {"WHILE", "while"},
             {"DO", "do"},
             {"DONE", "done"},
-            {"PLUS", "\\+"},
-            {"MINUS", "\\-"},
-            {"MULT", "\\*"},
+            {"ADD", "\\+"},
+            {"SUB", "\\-"},
+            {"MUL", "\\*"},
             {"DIV", "\\/"},
             {"EQ", "=="},
             {"LT", "<"},
             {"LEQ", "<="},
-            {"BREAK", "done"},
-            {"BREAK", "endif"},
-            {"CNTN", "then"},
+            {"ENDIF", "endif"},
+            {"THEN", "then"},
+            {"ID", "_?+[a-zA-Z_$0-9]+"},
+            {"EQUALS", "="},
+
     };
 
 

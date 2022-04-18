@@ -16,69 +16,182 @@ public class LPseParser {
         lex = new Lexer(LPseTokens.DEFS);
         lex.readFile(filePath);
         lex.next();
-        // call your start-symbol parsing method here
+        program();
         System.out.println("Parse succeeded.");
     }
-    public void program(){
+
+    public void program() {
         eat("BEGIN");
-        while(lex.tok().type!="END"){
+        while (lex.tok().type != "END") {
+            System.out.println("Program: " + lex.tok().type);
             statement();
         }
     }
-    public void statement(){
-        switch  (lex.tok().type){
+
+    public void statement() {
+        System.out.println("Statement: " + lex.tok().type);
+        switch (lex.tok().type) {
+            //statement -> PRINTINT exp SEMIC
             case "PRINTINT":
                 lex.next();
                 exp();
-                eat("SEMIC");
                 break;
+            //statement -> PRINTCHAR exp SEMIC
             case "PRINTCHAR":
                 lex.next();
                 exp();
-                eat("SEMIC");
                 break;
+            //statement -> IF LBR exp RBR THEN
             case "IF":
                 lex.next();
                 eat("LBR");
                 exp();
-                eat("RBR");
-                statement();
-                eat("ELSE");
                 statement();
                 break;
-            case "LCBR":
+            //statement -> THEN statement* ELSE
+            case "THEN":
                 lex.next();
-                while (lex.tok().type != "RCBR") {
+                while (lex.tok().type != "ELSE") {
+                    statement();
+                }
+                break;
+            //statement -> ELSE statement* ENDIF
+            case "ELSE":
+                lex.next();
+                while (lex.tok().type != "ENDIF") {
                     statement();
                 }
                 lex.next();
                 break;
-            // statement-> WHILE LBR exp LT exp RBR statement DONE
+            // statement-> WHILE LBR exp RBR DO
             case "WHILE":
                 lex.next();
                 eat("LBR");
                 exp();
-                eat("LT");
-                exp();
-                eat("RBR");
+                break;
+            // statement -> DO statement* DONE
+            case "DO":
+                eat("DO");
                 while (lex.tok().type != "DONE") {
-
+                    statement();
                 }
-
+                lex.next();
+                break;
+            // statement -> ID EQUALS exp SEMIC
+            case "ID":
+                exp();
+                break;
+            case "EQ":
+                eat("EQ");
+                BasicExp();
+                break;
+            case "SEMIC":
+                eat("SEMIC");
+                break;
+            case "LEQ":
+                eat("LEQ");
+                BasicExp();
+                break;
+            case "DONE":
+                eat("DONE");
+                break;
             default:
-                throw new ParseException(lex.tok(), "PRINTINT", "PRINTCHAR", "IF", "LCBR");
+                throw new ParseException(lex.tok(), "PRINTINT", "PRINTCHAR", "IF", "THEN", "ELSE", "WHILE", "DO", "ID");
         }
     }
-    public void exp(){
-        eat("INT");
+
+    public void exp() {
+        System.out.println("Exp: " + lex.tok().type);
+        BasicExp();
+        ExpRest();
     }
+
+    public void BasicExp() {
+        System.out.println("BasicExp: " + lex.tok().type);
+        switch (lex.tok().type) {
+            case "INT":
+                eat("INT");
+                break;
+            case "ID":
+                eat("ID");
+                break;
+            case "LBR":
+                eat("LBR");
+                exp();
+                break;
+            case "EQ":
+                eat("EQ");
+                exp();
+                break;
+            default:
+                throw new ParseException(lex.tok(), "INT", "ID", "LBR");
+        }
+    }
+
+    public void ExpRest() {
+        System.out.println("ExpRest: " + lex.tok().type);
+        switch (lex.tok().type) {
+            case "ADD":
+                eat("ADD");
+                BasicExp();
+                break;
+            case "SUB":
+                eat("SUB");
+                BasicExp();
+                lex.next();
+                break;
+            case "MUL":
+                eat("MUL");
+                BasicExp();
+                eat("SEMIC");
+                break;
+            case "DIV":
+                eat("DIV");
+                BasicExp();
+                break;
+            case "EQUALS":
+                eat("EQUALS");
+                exp();
+                break;
+            case "LEQ":
+                eat("LEQ");
+                exp();
+                break;
+            case "LT":
+                eat("LT");
+                exp();
+                break;
+            case "RBR":
+                eat("RBR");
+                //lex.next();
+                ExpRest();
+                //statement();
+                break;
+            case "EQ":
+                eat("EQ");
+                exp();
+                break;
+            case "THEN":
+                eat("THEN");
+                break;
+            case "DO":
+                eat("DO");
+                //statement();
+                break;
+            default:
+                throw new ParseException(lex.tok(), "ADD", "SUB", "MUL", "DIV", "SEMIC");
+        }
+    }
+
     private void eof() {
         if (lex.tok().type != "EOF") {
             throw new ParseException(lex.tok(), "EOF");
         }
     }
+
     /**
      * Check the head token and, if it matches, advance to the next token.
+     *
      * @param type the token type that we expect
      * @return the text of the head token that was matched
      * @throws ParseException if the head token does not match.

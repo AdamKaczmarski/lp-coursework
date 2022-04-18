@@ -10,7 +10,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../SSM_Lex/Lex.jar!/" />
+          <root url="jar://$MODULE_DIR$/../libs/Lex.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -19,7 +19,16 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../SSM_Lex/SSM_1_2.jar!/" />
+          <root url="jar://$MODULE_DIR$/../libs/SSM_1_2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../libs/LL1CheckV2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

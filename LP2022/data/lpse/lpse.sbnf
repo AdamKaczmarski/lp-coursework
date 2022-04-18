@@ -1,4 +1,23 @@
 -- LL(1) Grammar for LPse
-begin
-    printint 2 + 3;
-end
+
+program         -> BEGIN statement* END
+
+statement          -> IF LBR exp RBR THEN statement ELSE statement ENDIF
+statement          -> PRINTINT exp SEMIC
+statement          -> PRINTCHAR exp SEMIC
+statement          -> THEN statement* ELSE
+statement          -> WHILE LBR exp RBR statement DONE
+statement          -> ID EQUALS exp SEMIC
+exp                ->  BasicExp ExpRest
+
+BasicExp -> INT
+BasicExp -> ID
+BasicExp -> LBR exp RBR
+BasicExp -> EQ exp ExpRest
+
+ExpRest  -> ADD BasicExp
+ExpRest  -> MUL BasicExp
+ExpRest  -> SUB BasicExp
+ExpRest  -> DIV BasicExp
+ExpRest  -> EQ BasicExp
+ExpRest  ->
