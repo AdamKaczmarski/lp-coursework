@@ -47,38 +47,57 @@ public class LPseParser {
                 lex.next();
                 eat("LBR");
                 exp();
-                statement();
-                break;
-            //statement -> THEN statement* ELSE
-            case "THEN":
+                //statement();
                 lex.next();
                 while (!lex.tok().type.equals("ELSE")) {
                     statement();
                 }
-                break;
-            //statement -> ELSE statement* ENDIF
-            case "ELSE":
                 lex.next();
                 while (!lex.tok().type.equals("ENDIF")) {
                     statement();
                 }
                 lex.next();
                 break;
+            //statement -> THEN statement* ELSE
+            /*case "THEN":
+                lex.next();
+                while (!lex.tok().type.equals("ELSE")) {
+                    statement();
+                }
+                lex.next();
+                while (!lex.tok().type.equals("ENDIF")) {
+                    statement();
+                }
+                lex.next();
+                break;*/
+            //statement -> ELSE statement* ENDIF
+           /* case "ELSE":
+                lex.next();
+                while (!lex.tok().type.equals("ENDIF")) {
+                    statement();
+                }
+                lex.next();
+                break;*/
             // statement-> WHILE LBR exp RBR DO
             case "WHILE":
                 lex.next();
                 eat("LBR");
                 exp();
-                statement();
-                break;
-            // statement -> DO statement* DONE
-            case "DO":
+                //statement();
                 eat("DO");
                 while (lex.tok().type != "DONE") {
                     statement();
                 }
                 lex.next();
                 break;
+            // statement -> DO statement* DONE
+            /*case "DO":
+                eat("DO");
+                while (lex.tok().type != "DONE") {
+                    statement();
+                }
+                lex.next();
+                break;*/
             // statement -> ID EQUALS exp SEMIC
             case "ID":
                 exp();

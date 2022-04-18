@@ -1,30 +1,26 @@
 -- LL(1) Grammar for LPse
 
-program            -> BEGIN statement* END
+Program -> BEGIN Statement* END
 
-statement          -> PRINTINT exp SEMIC
-statement          -> PRINTCHAR exp SEMIC
-statement          -> IF LBR exp RBR
-statement          -> THEN statement* ELSE
-statement          -> ELSE statement* ENDIF
-statement          -> WHILE LBR exp RBR DO
-statement          -> DO statement* DONE
-statement          -> ID EQUALS exp SEMIC
+Statement -> PRINTINT Exp SEMIC
+Statement -> PRINTCHAR Exp SEMIC
+Statement -> IF LBR Exp RBR THEN Statement* ELSE Statement* ENDIF
+Statement -> WHILE LBR Exp RBR DO Statement* DONE
+Statement -> ID EQUALS Exp SEMIC
 
-exp                ->  BasicExp ExpRest
+Exp ->  BasicExp ExpRest
 
 BasicExp -> INT
 BasicExp -> ID
-BasicExp -> LBR exp RBR
-BasicExp -> EQ exp ExpRest
+BasicExp -> LBR Exp RBR
+BasicExp -> EQ Exp ExpRest
 
-ExpRest  -> ADD Exp
-ExpRest  -> MUL Exp
-ExpRest  -> SUB Exp
-ExpRest  -> DIV Exp
-ExpRest  -> EQ BasicExp
-ExpRest  -> LEQ exp
-ExpRest  -> EQ exp
-ExpRest  -> RBR
-ExpRest  -> LT exp
-ExpRest  -> SEMIC
+ExpRest -> ADD Exp
+ExpRest -> MUL Exp
+ExpRest -> SUB Exp
+ExpRest -> DIV Exp
+ExpRest -> LEQ Exp
+ExpRest -> EQ Exp
+ExpRest -> RBR
+ExpRest -> LT Exp
+ExpRest -> SEMIC
