@@ -1,0 +1,13 @@
+push goggle
+push 3
+sysc
+push 2
+sysc
+push 777
+store
+push goggle
+push 3
+sysc
+halt
+.data
+goggle: 0

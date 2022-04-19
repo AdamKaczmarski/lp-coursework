@@ -10,6 +10,8 @@ public final class LPfunTokens {
             {"SEMIC", ";"},
             {"BEGIN", "begin"},
             {"END", "end"},
+            {"FUN", "fun"},
+            {"RETURN", "return"},
             {"PRINTINT", "printint"},
             {"PRINTCHAR", "printchar"},
             {"IF", "if"},
@@ -29,6 +31,8 @@ public final class LPfunTokens {
             {"THEN", "then"},
             {"ID", "_?+[a-zA-Z_$0-9]+"},
             {"EQUALS", "="},
-            {"FUN", "fun"},
+            {"COMMA", ","},
+
     };
+
 }

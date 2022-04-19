@@ -1,5 +1,5 @@
 begin 
-   printint ( -1 <= x ) - laLa ( xx$7 ) ; 
+   printint ( -1 <= x ) - laLa ( xx$7 ) ;
    if ( _a <= 727 ) then 
       x__ = x ; 
       x = z ; 
