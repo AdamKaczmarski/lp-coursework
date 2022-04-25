@@ -149,8 +149,11 @@ public class LPseCompiler {
                 t = eat("ID");
                 if (!vars.contains(t)){
                     vars.add(t);
+                } else {
+                    emit("push " + t);
+                    emit("load");
                 }
-                emit("push " + t);
+
                 break;
             //BasicExp -> LBR exp RBR
             case "LBR":
@@ -169,44 +172,83 @@ public class LPseCompiler {
 
     public void ExpRest() {
         //System.out.println("ExpRest: " + lex.tok().type);
-        //emit("push total\nload");
         int i;
+
         switch (lex.tok().type) {
             //ExpRest  -> ADD Exp
             case "ADD":
                 eat("ADD");
-                i = Integer.parseInt(eat("INT"));
-                emit("push " + i);
-                emit("add");
-                //emit("push total\nstore");
-                ExpRest();
+                if (lex.tok().type.equals("INT")) {
+                    i = Integer.parseInt(eat("INT"));
+                    emit("push " + i);
+                    emit("add");
+                    ExpRest();
+                }
+                if (lex.tok().type.equals("ID")) {
+                    String t = eat("ID");
+                    emit("push " + t);
+                    emit("load");
+                    emit("add");
+                    ExpRest();
+                }
                 break;
             //ExpRest  -> SUB Exp
             case "SUB":
                 eat("SUB");
-                i = Integer.parseInt(eat("INT"));
-                emit("push " + i);
-                emit("sub");
-                //emit("push total\nstore");
-                ExpRest();
+                if (lex.tok().type.equals("INT")) {
+                    i = Integer.parseInt(eat("INT"));
+                    emit("push " + i);
+                    emit("sub");
+                    ExpRest();
+                }
+                if (lex.tok().type.equals("ID")) {
+                    String t = eat("ID");
+                    emit("push " + t);
+                    emit("load");
+                    emit("sub");
+                    ExpRest();
+                }
+                if (lex.tok().type.equals("LBR")) {
+                    eat("LBR");
+                    exp();
+                }
                 break;
             //ExpRest  -> MUL Exp
             case "MUL":
                 eat("MUL");
-                i = Integer.parseInt(eat("INT"));
-                emit("push " + i);
-                emit("mul");
-                //emit("push total\nstore");
-                ExpRest();
+                if (lex.tok().type.equals("INT")) {
+                    i = Integer.parseInt(eat("INT"));
+                    emit("push " + i);
+                    emit("mul");
+                    ExpRest();
+                }
+                if (lex.tok().type.equals("ID")) {
+                    String t = eat("ID");
+                    emit("push " + t);
+                    emit("load");
+                    emit("mul");
+                    if (lex.tok().type.equals("RBR")) {
+                        eat("RBR");
+                    }
+                    ExpRest();
+                }
                 break;
             //ExpRest  -> DIV Exp
             case "DIV":
                 eat("DIV");
-                i = Integer.parseInt(eat("INT"));
-                emit("push " + i);
-                emit("div");
-                //emit("push total\nstore");
-                ExpRest();
+                if (lex.tok().type.equals("INT")) {
+                    i = Integer.parseInt(eat("INT"));
+                    emit("push " + i);
+                    emit("div");
+                    ExpRest();
+                }
+                if (lex.tok().type.equals("ID")) {
+                    String t = eat("ID");
+                    emit("push " + t);
+                    emit("load");
+                    emit("div");
+                    ExpRest();
+                }
                 break;
             //ExpRest  -> RBR
             case "RBR":
@@ -215,9 +257,9 @@ public class LPseCompiler {
 
             case "EQUALS":
                 eat("EQUALS");
-                emit("push 3\nsysc\npush 2\nsysc");
-                BasicExp();
-                ExpRest();
+                //emit("push 3\nsysc\npush 2\nsysc");
+                exp();
+                emit("push "+vars.get(vars.size()-1));
                 emit("store");
 
                 break;
